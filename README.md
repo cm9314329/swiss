@@ -4,7 +4,9 @@ Udacity Swiss Pairings tournament project
 ## Overview
 Files:
 1. *tournament.sql*: A database schema for the tournament application. 
+
 2. *tournament.py*: A python module to register, delete, and count players, report and delete matches, rank players, and create next set of swiss pairings.
+
 3. *tournament_test.py*: functional tests to verify correctness 
 
 ## Requirements
