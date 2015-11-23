@@ -9,22 +9,30 @@ def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
     return psycopg2.connect("dbname=tournament")
 
-def deleteMatches():
-    """Remove all the match records from the database."""
+def executeNonQuery(nonQuery, data = None):
+    """
+    abstracts the common database operations so that
+    any non read operation doesn't require a lot of boilerplate. 
+    The same could be done of reads, but it's a bit overkill
+    for this project.
+     """
     conn = connect()
     cur = conn.cursor()
-    cur.execute("truncate table matches;")
+    if data is not None:
+        cur.execute(nonQuery, data)
+    else:
+        cur.execute(nonQuery)
     conn.commit()
     conn.close()
 
+
+def deleteMatches():
+    """Remove all the match records from the database."""
+    executeNonQuery("truncate table matches;")
 
 def deletePlayers():
     """Remove all the player records from the database."""
-    conn = connect()
-    cur = conn.cursor()
-    cur.execute("TRUNCATE TABLE players CASCADE;")
-    conn.commit()
-    conn.close()
+    executeNonQuery("TRUNCATE TABLE players CASCADE;")
 
 def countPlayers():
     """Returns the number of players currently registered."""
@@ -45,13 +53,9 @@ def registerPlayer(name):
     Args:
       name: the player's full name (need not be unique).
     """
-    conn = connect()
-    cur = conn.cursor()
     sql = "INSERT INTO players (name) VALUES (%s)"
     data = [name]
-    cur.execute(sql, data)
-    conn.commit()
-    conn.close()
+    executeNonQuery(sql, data)
 
 def playerStandings():
     """Returns a list of the players and their win records, sorted by wins.
@@ -83,11 +87,7 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
-    conn = connect()
-    cur = conn.cursor()
-    cur.execute("INSERT INTO matches (winner, loser) VALUES (%s, %s);""", (winner,loser))
-    conn.commit()
-    conn.close()
+    executeNonQuery("INSERT INTO matches (winner, loser) VALUES (%s, %s);", (winner,loser))
 
 def swissPairings():
     """Returns a list of pairs of players for the next round of a match.
