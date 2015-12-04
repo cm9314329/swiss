@@ -24,4 +24,3 @@ Type the following command in terminal/command prompt
 \>_python tournament_test.py_
 
 if all tests pass, there will be a confirmation for all.# Swiss
-
