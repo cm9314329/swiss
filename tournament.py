@@ -11,6 +11,10 @@ def connect():
 
 def executeNonQuery(nonQuery, data = None):
     """
+    nonQuery: the query string to be passed to the database
+
+    data: a list of parameters that the nonquery expects (if it expects any)
+
     abstracts the common database operations so that
     any non read operation doesn't require a lot of boilerplate. 
     The same could be done of reads, but it's a bit overkill
@@ -40,7 +44,6 @@ def countPlayers():
     cur = conn.cursor()
     cur.execute("SELECT COUNT(*) FROM players")
     players = int(cur.fetchone()[0])
-    conn.commit()
     conn.close()
     return players
     

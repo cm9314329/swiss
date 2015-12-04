@@ -10,8 +10,10 @@ CREATE DATABASE tournament;
 \c tournament;
 CREATE TABLE players (
 	pid        SERIAL PRIMARY KEY, 
-	name        varchar(50) NOT NULL
+	name       varchar(MAX) NOT NULL
 );
+
+INSERT INTO players (pid, name) VALUES (1, 'BYE');
 
 CREATE TABLE matches (
 	winner INTEGER NOT NULL,
@@ -44,3 +46,12 @@ LEFT OUTER JOIN
 ON p.pid = g.winner
 ORDER BY (coalesce(w.wincount,0)*1.0/coalesce(g.playcount,1)*1.0) DESC;
 
+--CREATE VIEW matchesplayed AS
+--SELECT winner, COUNT(*) AS playcount
+--FROM 
+--(
+--	SELECT winner FROM matches
+--	UNION ALL
+--	SELECT loser FROM matches
+--)
+ 
